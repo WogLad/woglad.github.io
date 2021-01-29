@@ -1,5 +1,3 @@
-// import chance from 'chancejs';
-
 function getRandomInt(max: number) {
   return Math.floor(Math.random() * Math.floor(max));
 }
@@ -8,17 +6,18 @@ class Human {
 	public name: string;
 	public age: number;
 
-	public currentInventory: Array<string>;
+	public currentInventory: Array<string> = new Array<string>();
 
-	constructor(name: string, age: number) {
-		this.name = name;
-		this.age = age;
+	constructor() {
+		// @ts-ignore
+		this.name = new Chance().name();
+		this.age = (getRandomInt(100) + 1);
 		this.currentInventory = new Array<string>();
 	}
 }
 
 class Miner extends Human {
-	public currentPickaxe: Pickaxe;
+	public currentPickaxe: Pickaxe | undefined;
 
 	public Mine(): void {
 		this.currentInventory.push("Ore")
@@ -26,30 +25,46 @@ class Miner extends Human {
 
 	public GenerateRandomValues():void {
 		this.currentPickaxe = getPickaxe(getRandomInt(7));
+		this.currentInventory.push((Pickaxe[this.currentPickaxe] + " Pickaxe"));
 	}
 }
 
 class Hunter extends Human {
-	public currentBow: Pickaxe;
+	public currentBow: Pickaxe | undefined;
 
 	public Hunt(): void {
 		this.currentInventory.push("Meat")
 	}
+
+	public GenerateRandomValues():void {
+		this.currentBow = getPickaxe(getRandomInt(7));
+		this.currentInventory.push((Pickaxe[this.currentBow] + " Bow"));
+	}
 }
 
 class Warrior extends Human {
-	public currentSword: Pickaxe;
+	public currentSword: Pickaxe | undefined;
 
 	public Mine(): void {
 		this.currentInventory.push("Rotten Flesh")
 	}
+
+	public GenerateRandomValues():void {
+		this.currentSword = getPickaxe(getRandomInt(7));
+		this.currentInventory.push((Pickaxe[this.currentSword] + " Sword"));
+	}
 }
 
 class Mage extends Human {
-	public currentStaff: StaffTypes;
+	public currentStaff: Staff | undefined;
 
 	public Mine(): void {
 		this.currentInventory.push("Crystal")
+	}
+
+	public GenerateRandomValues():void {
+		this.currentStaff = getStaff(getRandomInt(6));
+		this.currentInventory.push((Staff[this.currentStaff] + " Staff"));
 	}
 }
 
@@ -81,20 +96,57 @@ function getPickaxe(value: number): Pickaxe {
 	return pickaxe;
 }
 
+function getStaff(value: number): Staff {
+	var staff: Staff = Staff.AMETHYST;
+	switch (value) {
+		case 0:
+			staff = Staff.AMETHYST;
+			break;
+		case 1:
+			staff = Staff.TOPAZ;
+			break;
+		case 2:
+			staff = Staff.EMERALD;
+			break;
+		case 3:
+			staff = Staff.SAPPHIRE;
+			break;
+		case 4:
+			staff = Staff.RUBY;
+			break;
+		case 5:
+			staff = Staff.DIAMOND;
+			break;
+		}
+	return staff;
+}
+
 var humans: Array<Human> = [
 	
 ];
 
 function createHuman(): void {
-	var type = document.getElementById("humanTypeSelect") as HTMLSelectElement;
-	console.log(type.value);
-	// switch (type) {
-	// 	case "miner":
-	// 		var miner = new Miner("Bob", getRandomInt(100));
-	// 		miner.GenerateRandomValues();
-	// 		humans.push(miner);
-	// 		break;
-	// }
+	var type:HTMLSelectElement = document.getElementById("humanTypeSelect") as HTMLSelectElement;
+	switch (type.value) {
+		case "Miner":
+			humans.push(new Miner());
+			(humans[humans.length - 1] as Miner).GenerateRandomValues();
+			break;
+		case "Hunter":
+			humans.push(new Hunter());
+			(humans[humans.length - 1] as Hunter).GenerateRandomValues();
+			break;
+	}
+	updateListOfHumansDiv();
+}
+
+function updateListOfHumansDiv() {
+	var element: HTMLElement = document.getElementById("listOfHumans") as HTMLElement;
+	element.innerHTML = "<strong>" + humans[0].name + "</strong>'s inventory contains " + humans[0].currentInventory + ".";
+	for (let i = 1; i < humans.length; i++) {
+		element.innerHTML += "<br><strong>" + humans[0].name + "</strong>'s inventory contains " + humans[i].currentInventory + ".";
+	}
+	element.hidden = false;
 }
 
 function updateCreateHumanButton(): void {
@@ -114,7 +166,7 @@ enum Pickaxe {
 	OBSIDIAN
 }
 
-enum StaffTypes {
+enum Staff {
 	AMETHYST,
 	TOPAZ,
 	EMERALD,
@@ -123,59 +175,10 @@ enum StaffTypes {
 	DIAMOND
 }
 
-class Message {
-	public sender: string;
-	public messageText: string;
-
-	constructor(sender: string, message: string) {
-		this.sender = sender;
-		this.messageText = message;
+function logHumans(): void {
+	for (var i = 0; i < humans.length; i++) {
+    	console.log(humans[i]);
 	}
 }
 
-var message = new Message("WogLad", "Hi!");
-
-var messageCount: number = 0;
-
-var messages: Array<Message> = [
-	new Message("WogLad", "Hi!"),
-    new Message("Test1", "Hey there!"),
-    new Message("WogLad", "How is the app feeling?"),
-    new Message("Test1", "It's feeling really good.")
-];
-
-function updateMessages(): void {
-    var ps:HTMLElement = document.getElementById("notification");
-    var text: string = String(messageCount);
-    if(messageCount > 99) {
-    	ps.innerHTML = "<strong>messages (+99)</strong>";
-    }
-    else {
-    	ps.innerHTML = "<strong>messages (" + messageCount + ")</strong>";
-    }
-}
-
-function newMessage(message: string):void {
-	messageCount += 1;
-	updateMessages();
-}
-
-function displayMessages(): void {
-	var messageText:string;
-	messageText = "<strong>" + messages[0].sender + "</strong>: " + messages[0].messageText;
-	for (var i = 1; i < messages.length; ++i) {
-		// window.alert(messages[i]);
-		if(i == 0) { continue; }
-		messageText += "<br><strong>" + messages[i].sender + "</strong>: " + messages[i].messageText;
-	}
-	var ps = document.getElementById("messages");
-	ps.innerHTML = messageText;
-	document.getElementById("messages").hidden = false;
-}
-
-// console.log(chance.guid());
-
-
-setTimeout(updateMessages, 0)
 setTimeout(updateCreateHumanButton, 50)
-// setInterval(updateMessages, 1000);

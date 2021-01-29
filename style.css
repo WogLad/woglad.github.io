@@ -36,15 +36,28 @@ h1 {
     font-weight: bold;
     letter-spacing: 1px;
     color: #ffffff;
-    background-color: #fa243c;
+    background-color: darkslategray;
     padding: 15px 10px;
     border-radius: 5px;
-    box-shadow: 0 5px 0 0 #dc001a;
+    box-shadow: 0 5px 0 0 rgb(14, 24, 24)
 }
 button.newbutton:hover {
-    background-color: #FB4D61;
+    background-color: #169999;
 }
 button.newbutton:active {
     transform: translateY(5px);
     box-shadow: none;
+}
+select {
+    font-family: 'Fira Code';
+    background-color: darkslategray;
+    color: azure;
+    padding: 5px 15px 5px 15px;
+    border-radius: 5px;
+}
+option {
+    font-family: 'Fira Code';
+    background-color: darkslategray;
+    color: azure;
+    padding: 5px 15px 5px 15px;
 }
