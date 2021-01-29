@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+    <title>Social Media Platform</title>
+	<!-- <script src="node_modules/chancejs/chance.js"></script> -->
+	<script src="app.js"></script>
+</head>
+<body>
+	<h1>Civilization Manangement Game</h1>
+	<!-- <p id="para1"></p> -->
+	<div class="notification" id="notification"></div>
+	<br>
+	<div class="messages" id="messages" hidden="true"></div>
+	<br>
+	<button id="newMessageButton" class="newbutton" onclick="newMessage();">New Message</button>
+    <br>
+    <!-- <br> -->
+    <button id="displayMessagesButton" class="newbutton" onclick="displayMessages();">Show Messages</button>
+    <br>
+	<br>
+	<select id="humanTypeSelect" onchange="updateCreateHumanButton();">
+		<option value="Miner">Miner</option>
+		<option value="Hunter">Hunter</option>
+	</select>
+	<button id="createHumanButton" onclick="createHuman();">Create Human</button>
+    <!-- <button class="newbutton">Message</button> -->
+	<!-- <script type="text/javascript">
+		var c = new Chance();
+		console.log(chance.name());
+	</script> -->
+</body>
+</html>

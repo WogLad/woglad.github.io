@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css?family=Major+Mono+Display|Courgette');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+h1 {
+    font-family: 'Fira Code'
+}
+.notification {
+	padding: 5px;
+	border: 5px solid #d6e9c6;
+	border-radius: 5px;
+	color: #3c763d;
+	background-color: #dff0d8;
+	width: 15%;
+	text-align: center;
+    font-family: 'Fira Code';
+    font-size: 0.9rem;
+}
+.messages {
+	padding: 5px;
+	border: 5px solid #d6e9c6;
+	border-radius: 5px;
+	color: #3c763d;
+    background-color: #dff0d8;
+    font-family: 'Fira Code';
+    font-size: 0.9rem;
+	width: 40%;
+}
+.newbutton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 5vh;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-family: 'Fira Code';
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #ffffff;
+    background-color: #fa243c;
+    padding: 15px 10px;
+    border-radius: 5px;
+    box-shadow: 0 5px 0 0 #dc001a;
+}
+button.newbutton:hover {
+    background-color: #FB4D61;
+}
+button.newbutton:active {
+    transform: translateY(5px);
+    box-shadow: none;
+}
