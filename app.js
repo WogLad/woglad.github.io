@@ -33,6 +33,8 @@ var Miner = /** @class */ (function (_super) {
         this.currentInventory.push("Ore");
     };
     Miner.prototype.GenerateRandomValues = function () {
+        // @ts-ignore
+        this.name = chance.name();
         this.currentPickaxe = getPickaxe(getRandomInt(7));
         this.currentInventory.push((Pickaxe[this.currentPickaxe] + " Pickaxe"));
     };
@@ -150,7 +152,7 @@ function updateListOfHumansDiv() {
     var element = document.getElementById("listOfHumans");
     element.innerHTML = "<strong>" + humans[0].name + "</strong>'s inventory contains " + humans[0].currentInventory + ".";
     for (var i = 1; i < humans.length; i++) {
-        element.innerHTML += "<br><strong>" + humans[0].name + "</strong>'s inventory contains " + humans[i].currentInventory + ".";
+        element.innerHTML += "<br><strong>" + humans[i].name + "</strong>'s inventory contains " + humans[i].currentInventory + ".";
     }
     element.hidden = false;
 }
