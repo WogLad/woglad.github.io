@@ -10,7 +10,7 @@ class Human {
 
 	constructor() {
 		// @ts-ignore
-		this.name = new Chance().name();
+		this.name = chance.name();
 		this.age = (getRandomInt(100) + 1);
 		this.currentInventory = new Array<string>();
 	}
@@ -24,8 +24,6 @@ class Miner extends Human {
 	}
 
 	public GenerateRandomValues():void {
-		// @ts-ignore
-		this.name = chance.name();
 		this.currentPickaxe = getPickaxe(getRandomInt(7));
 		this.currentInventory.push((Pickaxe[this.currentPickaxe] + " Pickaxe"));
 	}

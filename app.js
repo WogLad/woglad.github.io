@@ -18,7 +18,7 @@ var Human = /** @class */ (function () {
     function Human() {
         this.currentInventory = new Array();
         // @ts-ignore
-        this.name = new Chance().name();
+        this.name = chance.name();
         this.age = (getRandomInt(100) + 1);
         this.currentInventory = new Array();
     }
@@ -33,8 +33,6 @@ var Miner = /** @class */ (function (_super) {
         this.currentInventory.push("Ore");
     };
     Miner.prototype.GenerateRandomValues = function () {
-        // @ts-ignore
-        this.name = chance.name();
         this.currentPickaxe = getPickaxe(getRandomInt(7));
         this.currentInventory.push((Pickaxe[this.currentPickaxe] + " Pickaxe"));
     };
