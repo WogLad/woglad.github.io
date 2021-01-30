@@ -57,7 +57,7 @@ var Warrior = /** @class */ (function (_super) {
     function Warrior() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Warrior.prototype.Mine = function () {
+    Warrior.prototype.Fight = function () {
         this.currentInventory.push("Rotten Flesh");
     };
     Warrior.prototype.GenerateRandomValues = function () {
@@ -71,7 +71,7 @@ var Mage = /** @class */ (function (_super) {
     function Mage() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Mage.prototype.Mine = function () {
+    Mage.prototype.Cast = function () {
         this.currentInventory.push("Crystal");
     };
     Mage.prototype.GenerateRandomValues = function () {
@@ -143,7 +143,17 @@ function createHuman() {
             humans.push(new Hunter());
             humans[humans.length - 1].GenerateRandomValues();
             break;
+        case "Warrior":
+            humans.push(new Warrior());
+            humans[humans.length - 1].GenerateRandomValues();
+            break;
+        case "Mage":
+            humans.push(new Mage());
+            humans[humans.length - 1].GenerateRandomValues();
+            break;
     }
+    // var makeHumansDoThingsButton:HTMLElement = document.getElementById("makeHumansDoThingsButton") as HTMLElement;
+    // makeHumansDoThingsButton.hidden = false;
     updateListOfHumansDiv();
 }
 function updateListOfHumansDiv() {
@@ -159,6 +169,27 @@ function updateCreateHumanButton() {
     var target = e;
     var e2 = document.getElementById("createHumanButton");
     e2.innerHTML = "Create " + target.value;
+}
+function makeHumansDoThings() {
+    if (humans.length < 1) {
+        alert("Create a human before using this button");
+        return;
+    }
+    humans.forEach(function (human) {
+        if (human instanceof Miner) {
+            human.Mine();
+        }
+        else if (human instanceof Hunter) {
+            human.Hunt();
+        }
+        else if (human instanceof Warrior) {
+            human.Fight();
+        }
+        else if (human instanceof Mage) {
+            human.Cast();
+        }
+    });
+    updateListOfHumansDiv();
 }
 var Pickaxe;
 (function (Pickaxe) {
@@ -184,4 +215,4 @@ function logHumans() {
         console.log(humans[i]);
     }
 }
-setTimeout(updateCreateHumanButton, 50);
+setTimeout(updateCreateHumanButton, 25);

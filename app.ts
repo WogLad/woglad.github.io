@@ -45,7 +45,7 @@ class Hunter extends Human {
 class Warrior extends Human {
 	public currentSword: Pickaxe | undefined;
 
-	public Mine(): void {
+	public Fight(): void {
 		this.currentInventory.push("Rotten Flesh")
 	}
 
@@ -58,7 +58,7 @@ class Warrior extends Human {
 class Mage extends Human {
 	public currentStaff: Staff | undefined;
 
-	public Mine(): void {
+	public Cast(): void {
 		this.currentInventory.push("Crystal")
 	}
 
@@ -136,7 +136,17 @@ function createHuman(): void {
 			humans.push(new Hunter());
 			(humans[humans.length - 1] as Hunter).GenerateRandomValues();
 			break;
+		case "Warrior":
+			humans.push(new Warrior());
+			(humans[humans.length - 1] as Warrior).GenerateRandomValues();
+			break;
+		case "Mage":
+			humans.push(new Mage());
+			(humans[humans.length - 1] as Mage).GenerateRandomValues();
+			break;
 	}
+	// var makeHumansDoThingsButton:HTMLElement = document.getElementById("makeHumansDoThingsButton") as HTMLElement;
+	// makeHumansDoThingsButton.hidden = false;
 	updateListOfHumansDiv();
 }
 
@@ -154,6 +164,25 @@ function updateCreateHumanButton(): void {
 	const target = e as HTMLSelectElement
 	var e2 = document.getElementById("createHumanButton") as HTMLElement;
 	e2.innerHTML = "Create " + target.value;
+}
+
+function makeHumansDoThings() {
+	if (humans.length < 1) { alert("Create a human before using this button"); return; }
+	humans.forEach(human => {
+		if (human instanceof Miner) {
+			(human as Miner).Mine();
+		}
+		else if (human instanceof Hunter) {
+			(human as Hunter).Hunt();
+		}
+		else if (human instanceof Warrior) {
+			(human as Warrior).Fight();	
+		}
+		else if (human instanceof Mage) {
+			(human as Mage).Cast();	
+		}
+	});
+	updateListOfHumansDiv();
 }
 
 enum Pickaxe {
@@ -181,4 +210,4 @@ function logHumans(): void {
 	}
 }
 
-setTimeout(updateCreateHumanButton, 50)
+setTimeout(updateCreateHumanButton, 25)

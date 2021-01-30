@@ -8,13 +8,19 @@
 </head>
 <body>
 	<h1>Civilization Manangement Game</h1>
-	<select id="humanTypeSelect" onchange="updateCreateHumanButton();">
-		<option value="Miner"><strong>Miner</strong></option>
-		<option value="Hunter"><strong>Hunter</strong></option>
-	</select>
+	<div>
+		<select id="humanTypeSelect" onchange="updateCreateHumanButton();">
+			<option value="Miner"><strong>Miner</strong></option>
+			<option value="Hunter"><strong>Hunter</strong></option>
+			<option value="Warrior"><strong>Warrior</strong></option>
+			<option value="Mage"><strong>Mage</strong></option>
+		</select>
+		<br>
+		<br>
+		<button class="newbutton" id="createHumanButton" onclick="createHuman();">Create Human</button>
+	</div>
 	<br>
-	<br>
-	<button class="newbutton" id="createHumanButton" onclick="createHuman();">Create Human</button>
+	<button class="newbutton" id="makeHumansDoThingsButton" onclick="makeHumansDoThings();">Make Humans Do Things</button>
 	<br>
 	<br>
 	<div class="messages" id="listOfHumans" hidden="true"></div>
