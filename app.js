@@ -22,6 +22,17 @@ var Human = /** @class */ (function () {
         this.age = (getRandomInt(100) + 1);
         this.currentInventory = new Array();
     }
+    Human.prototype.getInventoryString = function () {
+        var inventoryString = "";
+        var inv = this.currentInventory;
+        inventoryString += inv[0].name;
+        if (inv.length > 1) {
+            for (var i = 1; i < inv.length; i++) {
+                inventoryString += ", " + inv[i].name;
+            }
+        }
+        return inventoryString;
+    };
     return Human;
 }());
 var Miner = /** @class */ (function (_super) {
@@ -30,11 +41,12 @@ var Miner = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Miner.prototype.Mine = function () {
-        this.currentInventory.push("Ore");
+        this.currentInventory.push(itemDb["ore"]);
     };
     Miner.prototype.GenerateRandomValues = function () {
-        this.currentPickaxe = getPickaxe(getRandomInt(7));
-        this.currentInventory.push((Pickaxe[this.currentPickaxe] + " Pickaxe"));
+        var randomPickaxe = itemDb[getRandomValueFromList(["stone_pickaxe", "copper_pickaxe", "iron_pickaxe", "steel_pickaxe", "mithril_pickaxe", "adamantite_pickaxe", "obsidian_pickaxe"])];
+        this.currentPickaxe = randomPickaxe;
+        this.currentInventory.push(randomPickaxe);
     };
     return Miner;
 }(Human));
@@ -44,11 +56,12 @@ var Hunter = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Hunter.prototype.Hunt = function () {
-        this.currentInventory.push("Meat");
+        this.currentInventory.push(itemDb["meat"]);
     };
     Hunter.prototype.GenerateRandomValues = function () {
-        this.currentBow = getPickaxe(getRandomInt(7));
-        this.currentInventory.push((Pickaxe[this.currentBow] + " Bow"));
+        var randomBow = itemDb[getRandomValueFromList(["stone_bow", "copper_bow", "iron_bow", "steel_bow", "mithril_bow", "adamantite_bow", "obsidian_bow"])];
+        this.currentBow = randomBow;
+        this.currentInventory.push(randomBow);
     };
     return Hunter;
 }(Human));
@@ -58,11 +71,12 @@ var Warrior = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Warrior.prototype.Fight = function () {
-        this.currentInventory.push("Rotten Flesh");
+        this.currentInventory.push(itemDb["rotten_flesh"]);
     };
     Warrior.prototype.GenerateRandomValues = function () {
-        this.currentSword = getPickaxe(getRandomInt(7));
-        this.currentInventory.push((Pickaxe[this.currentSword] + " Sword"));
+        var randomSword = itemDb[getRandomValueFromList(["stone_sword", "copper_sword", "iron_sword", "steel_sword", "mithril_sword", "adamantite_sword", "obsidian_sword"])];
+        this.currentSword = randomSword;
+        this.currentInventory.push(randomSword);
     };
     return Warrior;
 }(Human));
@@ -72,65 +86,79 @@ var Mage = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Mage.prototype.Cast = function () {
-        this.currentInventory.push("Crystal");
+        this.currentInventory.push(itemDb["mana_crystal"]);
     };
     Mage.prototype.GenerateRandomValues = function () {
-        this.currentStaff = getStaff(getRandomInt(6));
-        this.currentInventory.push((Staff[this.currentStaff] + " Staff"));
+        var randomStaff = itemDb[getRandomValueFromList(["amethyst_staff", "topaz_staff", "emerald_staff", "sapphire_staff", "ruby_staff", "diamond_staff"])];
+        this.currentStaff = randomStaff;
+        this.currentInventory.push(randomStaff);
     };
     return Mage;
 }(Human));
-function getPickaxe(value) {
-    var pickaxe = Pickaxe.STONE;
-    switch (value) {
-        case 0:
-            pickaxe = Pickaxe.STONE;
-            break;
-        case 1:
-            pickaxe = Pickaxe.COPPER;
-            break;
-        case 2:
-            pickaxe = Pickaxe.IRON;
-            break;
-        case 3:
-            pickaxe = Pickaxe.STEEL;
-            break;
-        case 4:
-            pickaxe = Pickaxe.MITHRIL;
-            break;
-        case 5:
-            pickaxe = Pickaxe.ADAMANTITE;
-            break;
-        case 6:
-            pickaxe = Pickaxe.OBSIDIAN;
-            break;
-    }
-    return pickaxe;
+function getRandomValueFromList(list) {
+    return list[getRandomInt(list.length)];
 }
-function getStaff(value) {
-    var staff = Staff.AMETHYST;
-    switch (value) {
-        case 0:
-            staff = Staff.AMETHYST;
-            break;
-        case 1:
-            staff = Staff.TOPAZ;
-            break;
-        case 2:
-            staff = Staff.EMERALD;
-            break;
-        case 3:
-            staff = Staff.SAPPHIRE;
-            break;
-        case 4:
-            staff = Staff.RUBY;
-            break;
-        case 5:
-            staff = Staff.DIAMOND;
-            break;
+var ItemType;
+(function (ItemType) {
+    ItemType[ItemType["ORE"] = 0] = "ORE";
+    ItemType[ItemType["FOOD"] = 1] = "FOOD";
+    ItemType[ItemType["MONSTER_LOOT"] = 2] = "MONSTER_LOOT";
+    ItemType[ItemType["TOOL"] = 3] = "TOOL";
+    ItemType[ItemType["WEAPON"] = 4] = "WEAPON";
+})(ItemType || (ItemType = {}));
+var Item = /** @class */ (function () {
+    function Item(name, type) {
+        this.name = name;
+        this.type = type;
     }
-    return staff;
-}
+    return Item;
+}());
+var itemDb = {
+    //BASIC RESOURCES
+    "ore": new Item("Ore", ItemType.ORE),
+    "meat": new Item("Meat", ItemType.FOOD),
+    "rotten_flesh": new Item("Rotten Flesh", ItemType.MONSTER_LOOT),
+    "mana_crystal": new Item("Mana Crystal", ItemType.MONSTER_LOOT),
+    //PICKAXES
+    "stone_pickaxe": new Item("Stone Pickaxe", ItemType.TOOL),
+    "copper_pickaxe": new Item("Copper Pickaxe", ItemType.TOOL),
+    "iron_pickaxe": new Item("Iron Pickaxe", ItemType.TOOL),
+    "steel_pickaxe": new Item("Steel Pickaxe", ItemType.TOOL),
+    "mithril_pickaxe": new Item("Mithril Pickaxe", ItemType.TOOL),
+    "adamantite_pickaxe": new Item("Adamantite Pickaxe", ItemType.TOOL),
+    "obsidian_pickaxe": new Item("Obsidian Pickaxe", ItemType.TOOL),
+    //BOWS
+    "stone_bow": new Item("Stone Bow", ItemType.TOOL),
+    "copper_bow": new Item("Copper Bow", ItemType.TOOL),
+    "iron_bow": new Item("Iron Bow", ItemType.TOOL),
+    "steel_bow": new Item("Steel Bow", ItemType.TOOL),
+    "mithril_bow": new Item("Mithril Bow", ItemType.TOOL),
+    "adamantite_bow": new Item("Adamantite Bow", ItemType.TOOL),
+    "obsidian_bow": new Item("Obsidian Bow", ItemType.TOOL),
+    //AXES
+    "stone_axe": new Item("Stone Axe", ItemType.TOOL),
+    "copper_axe": new Item("Copper Axe", ItemType.TOOL),
+    "iron_axe": new Item("Iron Axe", ItemType.TOOL),
+    "steel_axe": new Item("Steel Axe", ItemType.TOOL),
+    "mithril_axe": new Item("Mithril Axe", ItemType.TOOL),
+    "adamantite_axe": new Item("Adamantite Axe", ItemType.TOOL),
+    "obsidian_axe": new Item("Obsidian Axe", ItemType.TOOL),
+    //SWORDS
+    "stone_sword": new Item("Stone Sword", ItemType.WEAPON),
+    "copper_sword": new Item("Copper Sword", ItemType.WEAPON),
+    "iron_sword": new Item("Iron Sword", ItemType.WEAPON),
+    "steel_sword": new Item("Steel Sword", ItemType.WEAPON),
+    "mithril_sword": new Item("Mithril Sword", ItemType.WEAPON),
+    "adamantite_sword": new Item("Adamantite Sword", ItemType.WEAPON),
+    "obsidian_sword": new Item("Obsidian Sword", ItemType.WEAPON),
+    //STAFFS
+    "amethyst_staff": new Item("Amethyst Staff", ItemType.WEAPON),
+    "topaz_staff": new Item("Topaz Staff", ItemType.WEAPON),
+    "emerald_staff": new Item("Emerald Staff", ItemType.WEAPON),
+    "sapphire_staff": new Item("Sapphire Staff", ItemType.WEAPON),
+    "ruby_staff": new Item("Ruby Staff", ItemType.WEAPON),
+    "diamond_staff": new Item("Diamond Staff", ItemType.WEAPON)
+};
 var humans = [];
 function createHuman() {
     var type = document.getElementById("humanTypeSelect");
@@ -158,9 +186,9 @@ function createHuman() {
 }
 function updateListOfHumansDiv() {
     var element = document.getElementById("listOfHumans");
-    element.innerHTML = "<strong>" + humans[0].name + "</strong>'s inventory contains " + humans[0].currentInventory + ".";
+    element.innerHTML = "<strong>" + humans[0].name + "</strong>'s inventory contains " + humans[0].getInventoryString() + ".";
     for (var i = 1; i < humans.length; i++) {
-        element.innerHTML += "<br><strong>" + humans[i].name + "</strong>'s inventory contains " + humans[i].currentInventory + ".";
+        element.innerHTML += "<br><strong>" + humans[i].name + "</strong>'s inventory contains " + humans[i].getInventoryString() + ".";
     }
     element.hidden = false;
 }
@@ -191,25 +219,6 @@ function makeHumansDoThings() {
     });
     updateListOfHumansDiv();
 }
-var Pickaxe;
-(function (Pickaxe) {
-    Pickaxe[Pickaxe["STONE"] = 0] = "STONE";
-    Pickaxe[Pickaxe["COPPER"] = 1] = "COPPER";
-    Pickaxe[Pickaxe["IRON"] = 2] = "IRON";
-    Pickaxe[Pickaxe["STEEL"] = 3] = "STEEL";
-    Pickaxe[Pickaxe["MITHRIL"] = 4] = "MITHRIL";
-    Pickaxe[Pickaxe["ADAMANTITE"] = 5] = "ADAMANTITE";
-    Pickaxe[Pickaxe["OBSIDIAN"] = 6] = "OBSIDIAN";
-})(Pickaxe || (Pickaxe = {}));
-var Staff;
-(function (Staff) {
-    Staff[Staff["AMETHYST"] = 0] = "AMETHYST";
-    Staff[Staff["TOPAZ"] = 1] = "TOPAZ";
-    Staff[Staff["EMERALD"] = 2] = "EMERALD";
-    Staff[Staff["SAPPHIRE"] = 3] = "SAPPHIRE";
-    Staff[Staff["RUBY"] = 4] = "RUBY";
-    Staff[Staff["DIAMOND"] = 5] = "DIAMOND";
-})(Staff || (Staff = {}));
 function logHumans() {
     for (var i = 0; i < humans.length; i++) {
         console.log(humans[i]);
