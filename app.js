@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -11,6 +12,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.itemDb = void 0;
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
@@ -41,10 +44,10 @@ var Miner = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Miner.prototype.Mine = function () {
-        this.currentInventory.push(itemDb["ore"]);
+        this.currentInventory.push(exports.itemDb["ore"]);
     };
     Miner.prototype.GenerateRandomValues = function () {
-        var randomPickaxe = itemDb[getRandomValueFromList(["stone_pickaxe", "copper_pickaxe", "iron_pickaxe", "steel_pickaxe", "mithril_pickaxe", "adamantite_pickaxe", "obsidian_pickaxe"])];
+        var randomPickaxe = exports.itemDb[getRandomValueFromList(["stone_pickaxe", "copper_pickaxe", "iron_pickaxe", "steel_pickaxe", "mithril_pickaxe", "adamantite_pickaxe", "obsidian_pickaxe"])];
         this.currentPickaxe = randomPickaxe;
         this.currentInventory.push(randomPickaxe);
     };
@@ -56,10 +59,10 @@ var Hunter = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Hunter.prototype.Hunt = function () {
-        this.currentInventory.push(itemDb["meat"]);
+        this.currentInventory.push(exports.itemDb["meat"]);
     };
     Hunter.prototype.GenerateRandomValues = function () {
-        var randomBow = itemDb[getRandomValueFromList(["stone_bow", "copper_bow", "iron_bow", "steel_bow", "mithril_bow", "adamantite_bow", "obsidian_bow"])];
+        var randomBow = exports.itemDb[getRandomValueFromList(["stone_bow", "copper_bow", "iron_bow", "steel_bow", "mithril_bow", "adamantite_bow", "obsidian_bow"])];
         this.currentBow = randomBow;
         this.currentInventory.push(randomBow);
     };
@@ -71,10 +74,10 @@ var Warrior = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Warrior.prototype.Fight = function () {
-        this.currentInventory.push(itemDb["rotten_flesh"]);
+        this.currentInventory.push(exports.itemDb["rotten_flesh"]);
     };
     Warrior.prototype.GenerateRandomValues = function () {
-        var randomSword = itemDb[getRandomValueFromList(["stone_sword", "copper_sword", "iron_sword", "steel_sword", "mithril_sword", "adamantite_sword", "obsidian_sword"])];
+        var randomSword = exports.itemDb[getRandomValueFromList(["stone_sword", "copper_sword", "iron_sword", "steel_sword", "mithril_sword", "adamantite_sword", "obsidian_sword"])];
         this.currentSword = randomSword;
         this.currentInventory.push(randomSword);
     };
@@ -86,10 +89,10 @@ var Mage = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Mage.prototype.Cast = function () {
-        this.currentInventory.push(itemDb["mana_crystal"]);
+        this.currentInventory.push(exports.itemDb["mana_crystal"]);
     };
     Mage.prototype.GenerateRandomValues = function () {
-        var randomStaff = itemDb[getRandomValueFromList(["amethyst_staff", "topaz_staff", "emerald_staff", "sapphire_staff", "ruby_staff", "diamond_staff"])];
+        var randomStaff = exports.itemDb[getRandomValueFromList(["amethyst_staff", "topaz_staff", "emerald_staff", "sapphire_staff", "ruby_staff", "diamond_staff"])];
         this.currentStaff = randomStaff;
         this.currentInventory.push(randomStaff);
     };
@@ -113,7 +116,7 @@ var Item = /** @class */ (function () {
     }
     return Item;
 }());
-var itemDb = {
+exports.itemDb = {
     //BASIC RESOURCES
     "ore": new Item("Ore", ItemType.ORE),
     "meat": new Item("Meat", ItemType.FOOD),

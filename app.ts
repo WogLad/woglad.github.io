@@ -106,7 +106,7 @@ class Item {
 	}
 }
 
-const itemDb = {
+export const itemDb = {
 	//BASIC RESOURCES
 	"ore": new Item("Ore", ItemType.ORE),
 	"meat": new Item("Meat", ItemType.FOOD),
