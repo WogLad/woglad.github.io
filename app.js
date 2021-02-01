@@ -1,4 +1,3 @@
-"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -12,19 +11,53 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.itemDb = void 0;
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 }
+var Stats = /** @class */ (function () {
+    function Stats() {
+        this.strength = getRandomInt(0, 101);
+        this.defense = getRandomInt(0, 101);
+        this.dexterity = getRandomInt(0, 101);
+        this.HP = getRandomInt(0, 101);
+        this.vitality = getRandomInt(0, 101);
+        this.MP = getRandomInt(0, 101);
+        this.intelligence = getRandomInt(0, 101);
+        this.wisdom = getRandomInt(0, 101);
+        this.luck = getRandomInt(0, 101);
+    }
+    return Stats;
+}());
 var Human = /** @class */ (function () {
     function Human() {
-        this.currentInventory = new Array();
         // @ts-ignore
         this.name = chance.name();
-        this.age = (getRandomInt(100) + 1);
+        this.age = getRandomInt(1, 101);
+        this.humanLogs = new Array();
+        this.currentGold = 0;
         this.currentInventory = new Array();
+        // this.stats = new Stats();
+        this.stats = {
+            "strength": getRandomInt(0, 101),
+            "defense": getRandomInt(0, 101),
+            "dexterity": getRandomInt(0, 101),
+            "HP": getRandomInt(0, 101),
+            "vitality": getRandomInt(0, 101),
+            "MP": getRandomInt(0, 101),
+            "intelligence": getRandomInt(0, 101),
+            "wisdom": getRandomInt(0, 101),
+            "luck": getRandomInt(0, 101)
+        };
     }
+    Human.prototype.AddToHumanLogs = function (log) {
+        this.humanLogs.push(log);
+    };
+    Human.prototype.AddToInventory = function (item, amount) {
+        this.currentInventory.push(item);
+        this.AddToHumanLogs("Received " + amount.toString() + " " + item.name + ".");
+    };
     Human.prototype.getInventoryString = function () {
         var inventoryString = "";
         var inv = this.currentInventory;
@@ -44,12 +77,12 @@ var Miner = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Miner.prototype.Mine = function () {
-        this.currentInventory.push(exports.itemDb["ore"]);
+        this.AddToInventory(itemDb["ore"], getRandomInt(2, 5));
     };
     Miner.prototype.GenerateRandomValues = function () {
-        var randomPickaxe = exports.itemDb[getRandomValueFromList(["stone_pickaxe", "copper_pickaxe", "iron_pickaxe", "steel_pickaxe", "mithril_pickaxe", "adamantite_pickaxe", "obsidian_pickaxe"])];
+        var randomPickaxe = itemDb[getRandomValueFromList(["stone_pickaxe", "copper_pickaxe", "iron_pickaxe", "steel_pickaxe", "mithril_pickaxe", "adamantite_pickaxe", "obsidian_pickaxe"])];
         this.currentPickaxe = randomPickaxe;
-        this.currentInventory.push(randomPickaxe);
+        this.AddToInventory(randomPickaxe, 1);
     };
     return Miner;
 }(Human));
@@ -59,12 +92,12 @@ var Hunter = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Hunter.prototype.Hunt = function () {
-        this.currentInventory.push(exports.itemDb["meat"]);
+        this.AddToInventory(itemDb["meat"], getRandomInt(2, 5));
     };
     Hunter.prototype.GenerateRandomValues = function () {
-        var randomBow = exports.itemDb[getRandomValueFromList(["stone_bow", "copper_bow", "iron_bow", "steel_bow", "mithril_bow", "adamantite_bow", "obsidian_bow"])];
+        var randomBow = itemDb[getRandomValueFromList(["stone_bow", "copper_bow", "iron_bow", "steel_bow", "mithril_bow", "adamantite_bow", "obsidian_bow"])];
         this.currentBow = randomBow;
-        this.currentInventory.push(randomBow);
+        this.AddToInventory(randomBow, 1);
     };
     return Hunter;
 }(Human));
@@ -74,12 +107,12 @@ var Warrior = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Warrior.prototype.Fight = function () {
-        this.currentInventory.push(exports.itemDb["rotten_flesh"]);
+        this.AddToInventory(itemDb["rotten_flesh"], getRandomInt(2, 5));
     };
     Warrior.prototype.GenerateRandomValues = function () {
-        var randomSword = exports.itemDb[getRandomValueFromList(["stone_sword", "copper_sword", "iron_sword", "steel_sword", "mithril_sword", "adamantite_sword", "obsidian_sword"])];
+        var randomSword = itemDb[getRandomValueFromList(["stone_sword", "copper_sword", "iron_sword", "steel_sword", "mithril_sword", "adamantite_sword", "obsidian_sword"])];
         this.currentSword = randomSword;
-        this.currentInventory.push(randomSword);
+        this.AddToInventory(randomSword, 1);
     };
     return Warrior;
 }(Human));
@@ -89,17 +122,17 @@ var Mage = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Mage.prototype.Cast = function () {
-        this.currentInventory.push(exports.itemDb["mana_crystal"]);
+        this.AddToInventory(itemDb["mana_crystal"], getRandomInt(2, 5));
     };
     Mage.prototype.GenerateRandomValues = function () {
-        var randomStaff = exports.itemDb[getRandomValueFromList(["amethyst_staff", "topaz_staff", "emerald_staff", "sapphire_staff", "ruby_staff", "diamond_staff"])];
+        var randomStaff = itemDb[getRandomValueFromList(["amethyst_staff", "topaz_staff", "emerald_staff", "sapphire_staff", "ruby_staff", "diamond_staff"])];
         this.currentStaff = randomStaff;
-        this.currentInventory.push(randomStaff);
+        this.AddToInventory(randomStaff, 1);
     };
     return Mage;
 }(Human));
 function getRandomValueFromList(list) {
-    return list[getRandomInt(list.length)];
+    return list[getRandomInt(0, list.length)];
 }
 var ItemType;
 (function (ItemType) {
@@ -116,7 +149,7 @@ var Item = /** @class */ (function () {
     }
     return Item;
 }());
-exports.itemDb = {
+var itemDb = {
     //BASIC RESOURCES
     "ore": new Item("Ore", ItemType.ORE),
     "meat": new Item("Meat", ItemType.FOOD),
@@ -164,27 +197,49 @@ exports.itemDb = {
 };
 var humans = [];
 function createHuman() {
-    var type = document.getElementById("humanTypeSelect");
-    switch (type.value) {
-        case "Miner":
-            humans.push(new Miner());
-            humans[humans.length - 1].GenerateRandomValues();
+    var human = new Human();
+    var humanStats = human.stats;
+    var val = Math.max.apply(null, Object.values(humanStats)), highestVal = Object.keys(humanStats).find(function (a) {
+        return humanStats[a] === val;
+    });
+    switch (highestVal) {
+        case "strength": // Gives you some sort of physical based profession.
             break;
-        case "Hunter":
-            humans.push(new Hunter());
-            humans[humans.length - 1].GenerateRandomValues();
+        case "defense": // Gives you some sort of tank/guard profession.
             break;
-        case "Warrior":
-            humans.push(new Warrior());
-            humans[humans.length - 1].GenerateRandomValues();
+        case "dexterity": // Gives you an assassin profession or something.
             break;
-        case "Mage":
-            humans.push(new Mage());
-            humans[humans.length - 1].GenerateRandomValues();
+        case "HP": // Same as defense.
+            break;
+        case "vitality": // Same as HP & defense.
+            break;
+        case "MP": // Gives a mage/healer profession.
+            break;
+        case "intelligence": // Same as MP but could also give a teaching profession.
+            break;
+        case "wisdom": // Same as MP.
+            break;
+        case "luck": // Haven't decided yet.
             break;
     }
-    // var makeHumansDoThingsButton:HTMLElement = document.getElementById("makeHumansDoThingsButton") as HTMLElement;
-    // makeHumansDoThingsButton.hidden = false;
+    // switch ((document.getElementById("humanTypeSelect") as HTMLSelectElement).value) {
+    // 	case "Miner":
+    // 		humans.push(new Miner());
+    // 		(humans[humans.length - 1] as Miner).GenerateRandomValues();
+    // 		break;
+    // 	case "Hunter":
+    // 		humans.push(new Hunter());
+    // 		(humans[humans.length - 1] as Hunter).GenerateRandomValues();
+    // 		break;
+    // 	case "Warrior":
+    // 		humans.push(new Warrior());
+    // 		(humans[humans.length - 1] as Warrior).GenerateRandomValues();
+    // 		break;
+    // 	case "Mage":
+    // 		humans.push(new Mage());
+    // 		(humans[humans.length - 1] as Mage).GenerateRandomValues();
+    // 		break;
+    // }
     updateListOfHumansDiv();
 }
 function updateListOfHumansDiv() {

@@ -1,18 +1,74 @@
-function getRandomInt(max: number) {
-  return Math.floor(Math.random() * Math.floor(max));
+function getRandomInt(min: number, max: number) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+}
+
+class Stats {
+	//PHYSICAL STATS
+	public strength: number; // Determines the physical damage and strength.
+	public defense: number; // Determines the physical defense, which is what factors reduction of damage.
+	public dexterity: number; // Determines the agility/movement-speed and how quick the motion of the limbs are.
+	public HP: number; // Determines the HP(hit-points)/health.
+	public vitality: number; // Determines the amount of HP that is restored every second.
+
+	//MAGIC STATS
+	public MP: number; // Determines the MP(mana-points)/max-mana.
+	public intelligence: number; // Determines the IQ and the capacity to learn new things(mainly in magic). Higher intelligence translates to higher talent for magic.
+	public wisdom: number; // Determines the amount of MP that is restored every second.
+
+	//EXTRA STATS
+	public luck: number; // Determines the chance of getting better loot.
+
+	constructor() {
+		this.strength = getRandomInt(0, 101);
+		this.defense = getRandomInt(0, 101);
+		this.dexterity = getRandomInt(0, 101);
+		this.HP = getRandomInt(0, 101);
+		this.vitality = getRandomInt(0, 101);
+		this.MP = getRandomInt(0, 101);
+		this.intelligence = getRandomInt(0, 101);
+		this.wisdom = getRandomInt(0, 101);
+		this.luck = getRandomInt(0, 101);
+	}
 }
 
 class Human {
 	public name: string;
 	public age: number;
-
-	public currentInventory: Array<Item> = new Array<Item>();
+	public humanLogs: Array<string>;
+	public currentGold: number;
+	public currentInventory: Array<Item>;
+	public stats;
 
 	constructor() {
 		// @ts-ignore
 		this.name = chance.name();
-		this.age = (getRandomInt(100) + 1);
+		this.age = getRandomInt(1, 101);
+		this.humanLogs = new Array<string>();
+		this.currentGold = 0;
 		this.currentInventory = new Array<Item>();
+		// this.stats = new Stats();
+		this.stats = {
+			"strength": getRandomInt(0, 101),
+			"defense": getRandomInt(0, 101),
+			"dexterity": getRandomInt(0, 101),
+			"HP": getRandomInt(0, 101),
+			"vitality": getRandomInt(0, 101),
+			"MP": getRandomInt(0, 101),
+			"intelligence": getRandomInt(0, 101),
+			"wisdom": getRandomInt(0, 101),
+			"luck": getRandomInt(0, 101)
+		}
+	}
+
+	public AddToHumanLogs(log: string): void {
+		this.humanLogs.push(log);
+	}
+
+	public AddToInventory(item: Item, amount: number): void {
+		this.currentInventory.push(item);
+		this.AddToHumanLogs("Received " + amount.toString() + " " + item.name + ".");
 	}
 
 	public getInventoryString(): string {
@@ -32,13 +88,13 @@ class Miner extends Human {
 	public currentPickaxe: Item | undefined;
 
 	public Mine(): void {
-		this.currentInventory.push(itemDb["ore"]);
+		this.AddToInventory(itemDb["ore"], getRandomInt(2, 5));
 	}
 
 	public GenerateRandomValues():void {
 		var randomPickaxe: Item = itemDb[getRandomValueFromList(["stone_pickaxe", "copper_pickaxe", "iron_pickaxe", "steel_pickaxe", "mithril_pickaxe", "adamantite_pickaxe", "obsidian_pickaxe"])];
 		this.currentPickaxe = randomPickaxe;
-		this.currentInventory.push(randomPickaxe);
+		this.AddToInventory(randomPickaxe, 1);
 	}
 }
 
@@ -46,13 +102,13 @@ class Hunter extends Human {
 	public currentBow: Item | undefined;
 
 	public Hunt(): void {
-		this.currentInventory.push(itemDb["meat"]);
+		this.AddToInventory(itemDb["meat"], getRandomInt(2, 5));
 	}
 
 	public GenerateRandomValues():void {
 		var randomBow: Item = itemDb[getRandomValueFromList(["stone_bow", "copper_bow", "iron_bow", "steel_bow", "mithril_bow", "adamantite_bow", "obsidian_bow"])];
 		this.currentBow = randomBow;
-		this.currentInventory.push(randomBow);
+		this.AddToInventory(randomBow, 1);
 	}
 }
 
@@ -60,13 +116,13 @@ class Warrior extends Human {
 	public currentSword: Item | undefined;
 
 	public Fight(): void {
-		this.currentInventory.push(itemDb["rotten_flesh"]);
+		this.AddToInventory(itemDb["rotten_flesh"], getRandomInt(2, 5));
 	}
 
 	public GenerateRandomValues():void {
 		var randomSword: Item = itemDb[getRandomValueFromList(["stone_sword", "copper_sword", "iron_sword", "steel_sword", "mithril_sword", "adamantite_sword", "obsidian_sword"])];
 		this.currentSword = randomSword;
-		this.currentInventory.push(randomSword);
+		this.AddToInventory(randomSword, 1);
 	}
 }
 
@@ -74,18 +130,18 @@ class Mage extends Human {
 	public currentStaff: Item | undefined;
 
 	public Cast(): void {
-		this.currentInventory.push(itemDb["mana_crystal"]);
+		this.AddToInventory(itemDb["mana_crystal"], getRandomInt(2, 5));
 	}
 
 	public GenerateRandomValues():void {
 		var randomStaff: Item = itemDb[getRandomValueFromList(["amethyst_staff", "topaz_staff", "emerald_staff", "sapphire_staff", "ruby_staff", "diamond_staff"])];
 		this.currentStaff = randomStaff;
-		this.currentInventory.push(randomStaff);
+		this.AddToInventory(randomStaff, 1);
 	}
 }
 
 function getRandomValueFromList(list: any[]): any {
-	return list[getRandomInt(list.length)]
+	return list[getRandomInt(0, list.length)]
 }
 
 enum ItemType {
@@ -106,7 +162,7 @@ class Item {
 	}
 }
 
-export const itemDb = {
+const itemDb = {
 	//BASIC RESOURCES
 	"ore": new Item("Ore", ItemType.ORE),
 	"meat": new Item("Meat", ItemType.FOOD),
@@ -161,27 +217,53 @@ export const itemDb = {
 var humans: Array<Human> = [];
 
 function createHuman(): void {
-	var type:HTMLSelectElement = document.getElementById("humanTypeSelect") as HTMLSelectElement;
-	switch (type.value) {
-		case "Miner":
-			humans.push(new Miner());
-			(humans[humans.length - 1] as Miner).GenerateRandomValues();
+
+	var human:Human = new Human();
+	var humanStats = human.stats;
+	var val = Math.max.apply(null, Object.values(humanStats)),
+	highestVal = Object.keys(humanStats).find(function(a) {
+		return humanStats[a] === val;
+	});
+	
+	switch (highestVal) {
+		case "strength": // Gives you some sort of physical based profession.
 			break;
-		case "Hunter":
-			humans.push(new Hunter());
-			(humans[humans.length - 1] as Hunter).GenerateRandomValues();
+		case "defense": // Gives you some sort of tank/guard profession.
 			break;
-		case "Warrior":
-			humans.push(new Warrior());
-			(humans[humans.length - 1] as Warrior).GenerateRandomValues();
+		case "dexterity": // Gives you an assassin profession or something.
 			break;
-		case "Mage":
-			humans.push(new Mage());
-			(humans[humans.length - 1] as Mage).GenerateRandomValues();
+		case "HP": // Same as defense.
+			break;
+		case "vitality": // Same as HP & defense.
+			break;
+		case "MP": // Gives a mage/healer profession.
+			break;
+		case "intelligence": // Same as MP but could also give a teaching profession.
+			break;
+		case "wisdom": // Same as MP.
+			break;
+		case "luck": // Haven't decided yet.
 			break;
 	}
-	// var makeHumansDoThingsButton:HTMLElement = document.getElementById("makeHumansDoThingsButton") as HTMLElement;
-	// makeHumansDoThingsButton.hidden = false;
+
+	// switch ((document.getElementById("humanTypeSelect") as HTMLSelectElement).value) {
+	// 	case "Miner":
+	// 		humans.push(new Miner());
+	// 		(humans[humans.length - 1] as Miner).GenerateRandomValues();
+	// 		break;
+	// 	case "Hunter":
+	// 		humans.push(new Hunter());
+	// 		(humans[humans.length - 1] as Hunter).GenerateRandomValues();
+	// 		break;
+	// 	case "Warrior":
+	// 		humans.push(new Warrior());
+	// 		(humans[humans.length - 1] as Warrior).GenerateRandomValues();
+	// 		break;
+	// 	case "Mage":
+	// 		humans.push(new Mage());
+	// 		(humans[humans.length - 1] as Mage).GenerateRandomValues();
+	// 		break;
+	// }
 	updateListOfHumansDiv();
 }
 
