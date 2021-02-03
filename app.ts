@@ -4,35 +4,6 @@ function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 }
 
-class Stats {
-	//PHYSICAL STATS
-	public strength: number; // Determines the physical damage and strength.
-	public defense: number; // Determines the physical defense, which is what factors reduction of damage.
-	public dexterity: number; // Determines the agility/movement-speed and how quick the motion of the limbs are.
-	public HP: number; // Determines the HP(hit-points)/health.
-	public vitality: number; // Determines the amount of HP that is restored every second.
-
-	//MAGIC STATS
-	public MP: number; // Determines the MP(mana-points)/max-mana.
-	public intelligence: number; // Determines the IQ and the capacity to learn new things(mainly in magic). Higher intelligence translates to higher talent for magic.
-	public wisdom: number; // Determines the amount of MP that is restored every second.
-
-	//EXTRA STATS
-	public luck: number; // Determines the chance of getting better loot.
-
-	constructor() {
-		this.strength = getRandomInt(0, 101);
-		this.defense = getRandomInt(0, 101);
-		this.dexterity = getRandomInt(0, 101);
-		this.HP = getRandomInt(0, 101);
-		this.vitality = getRandomInt(0, 101);
-		this.MP = getRandomInt(0, 101);
-		this.intelligence = getRandomInt(0, 101);
-		this.wisdom = getRandomInt(0, 101);
-		this.luck = getRandomInt(0, 101);
-	}
-}
-
 class Human {
 	public name: string;
 	public age: number;
@@ -48,7 +19,6 @@ class Human {
 		this.humanLogs = new Array<string>();
 		this.currentGold = 0;
 		this.currentInventory = new Array<Item>();
-		// this.stats = new Stats();
 		this.stats = {
 			"strength": getRandomInt(0, 101),
 			"defense": getRandomInt(0, 101),
@@ -57,8 +27,7 @@ class Human {
 			"vitality": getRandomInt(0, 101),
 			"MP": getRandomInt(0, 101),
 			"intelligence": getRandomInt(0, 101),
-			"wisdom": getRandomInt(0, 101),
-			"luck": getRandomInt(0, 101)
+			"wisdom": getRandomInt(0, 101)
 		}
 	}
 
@@ -67,34 +36,24 @@ class Human {
 	}
 
 	public AddToInventory(item: Item, amount: number): void {
-		this.currentInventory.push(item);
+		for (let i = 0; i < amount; i++) {
+			this.currentInventory.push(item);	
+		}
 		this.AddToHumanLogs("Received " + amount.toString() + " " + item.name + ".");
 	}
 
 	public getInventoryString(): string {
 		var inventoryString: string = "";
 		var inv:Array<Item> = this.currentInventory;
-		inventoryString += inv[0].name;
-		if (inv.length > 1) {
-				for (let i = 1; i < inv.length; i++) {
-				inventoryString += ", " +  inv[i].name;
+		if (inv.length > 0) {
+			inventoryString += inv[0].name;
+			if (inv.length > 1) {
+					for (let i = 1; i < inv.length; i++) {
+					inventoryString += ", " +  inv[i].name;
+				}
 			}
 		}
 		return inventoryString;
-	}
-}
-
-class Miner extends Human {
-	public currentPickaxe: Item | undefined;
-
-	public Mine(): void {
-		this.AddToInventory(itemDb["ore"], getRandomInt(2, 5));
-	}
-
-	public GenerateRandomValues():void {
-		var randomPickaxe: Item = itemDb[getRandomValueFromList(["stone_pickaxe", "copper_pickaxe", "iron_pickaxe", "steel_pickaxe", "mithril_pickaxe", "adamantite_pickaxe", "obsidian_pickaxe"])];
-		this.currentPickaxe = randomPickaxe;
-		this.AddToInventory(randomPickaxe, 1);
 	}
 }
 
@@ -110,6 +69,11 @@ class Hunter extends Human {
 		this.currentBow = randomBow;
 		this.AddToInventory(randomBow, 1);
 	}
+
+	constructor() {
+		super();
+		this.GenerateRandomValues();
+	}
 }
 
 class Warrior extends Human {
@@ -124,6 +88,30 @@ class Warrior extends Human {
 		this.currentSword = randomSword;
 		this.AddToInventory(randomSword, 1);
 	}
+
+	constructor() {
+		super();
+		this.GenerateRandomValues();
+	}
+}
+
+class Guard extends Human {
+	public currentSword: Item | undefined;
+
+	public Guard(): void {
+		this.AddToInventory(itemDb["rotten_flesh"], getRandomInt(2, 5));
+	}
+
+	public GenerateRandomValues():void {
+		var randomSword: Item = itemDb[getRandomValueFromList(["stone_sword", "copper_sword", "iron_sword", "steel_sword", "mithril_sword", "adamantite_sword", "obsidian_sword"])];
+		this.currentSword = randomSword;
+		this.AddToInventory(randomSword, 1);
+	}
+
+	constructor() {
+		super();
+		this.GenerateRandomValues();
+	}
 }
 
 class Mage extends Human {
@@ -137,6 +125,61 @@ class Mage extends Human {
 		var randomStaff: Item = itemDb[getRandomValueFromList(["amethyst_staff", "topaz_staff", "emerald_staff", "sapphire_staff", "ruby_staff", "diamond_staff"])];
 		this.currentStaff = randomStaff;
 		this.AddToInventory(randomStaff, 1);
+	}
+
+	constructor() {
+		super();
+		this.GenerateRandomValues();
+	}
+}
+
+class Doctor extends Human {
+	public currentWand: Item | undefined;
+
+	public Heal(): void {
+		this.AddToInventory(itemDb["mana_crystal"], getRandomInt(2, 5));
+	}
+
+	public GenerateRandomValues():void {
+		var randomWand: Item = itemDb["healing_wand"];
+		this.currentWand = randomWand;
+		this.AddToInventory(randomWand, 1);
+	}
+
+	constructor() {
+		super();
+		this.GenerateRandomValues();
+	}
+}
+
+class Alchemist extends Human {
+	public Cast(): void {
+		this.AddToInventory(itemDb["mana_crystal"], getRandomInt(2, 5));
+	}
+}
+
+class Trader extends Human {
+	public Trade(): void {
+		this.AddToInventory(itemDb["mana_crystal"], getRandomInt(2, 5));
+	}
+}
+
+class Miner extends Human {
+	public currentPickaxe: Item | undefined;
+
+	public Mine(): void {
+		this.AddToInventory(itemDb["ore"], getRandomInt(2, 5));
+	}
+
+	public GenerateRandomValues():void {
+		var randomPickaxe: Item = itemDb[getRandomValueFromList(["stone_pickaxe", "copper_pickaxe", "iron_pickaxe", "steel_pickaxe", "mithril_pickaxe", "adamantite_pickaxe", "obsidian_pickaxe"])];
+		this.currentPickaxe = randomPickaxe;
+		this.AddToInventory(randomPickaxe, 1);
+	}
+
+	constructor() {
+		super();
+		this.GenerateRandomValues();
 	}
 }
 
@@ -211,59 +254,136 @@ const itemDb = {
 	"emerald_staff": new Item("Emerald Staff", ItemType.WEAPON),
 	"sapphire_staff": new Item("Sapphire Staff", ItemType.WEAPON),
 	"ruby_staff": new Item("Ruby Staff", ItemType.WEAPON),
-	"diamond_staff": new Item("Diamond Staff", ItemType.WEAPON)
+	"diamond_staff": new Item("Diamond Staff", ItemType.WEAPON),
+
+	//WANDS
+	"healing_wand": new Item("Healing Wand", ItemType.TOOL)
 }
 
 var humans: Array<Human> = [];
 
 function createHuman(): void {
-
 	var human:Human = new Human();
-	var humanStats = human.stats;
+	const humanStats = human.stats;
 	var val = Math.max.apply(null, Object.values(humanStats)),
 	highestVal = Object.keys(humanStats).find(function(a) {
 		return humanStats[a] === val;
 	});
+
+	var highTierVal: number = 70;
+	var midTierVal: number = 35;
 	
-	switch (highestVal) {
+	switch (highestVal) { // 70 and above is considered HIGH, less than 70 and 35 and above is considerd MEDIUM & everything else is LOW.
 		case "strength": // Gives you some sort of physical based profession.
+			if (humanStats["intelligence"] >= highTierVal) { // High Strength, High Intelligence
+				humans.push(new Hunter());
+				(humans[humans.length - 1] as Hunter).stats = human.stats;;
+			}
+			else if (humanStats["intelligence"] >= midTierVal && humanStats["intelligence"] < highTierVal) { // High Strength, Mid Intelligence
+				humans.push(new Warrior());
+				(humans[humans.length - 1] as Warrior).stats = human.stats;;
+			}
+			else if (humanStats["intelligence"] < midTierVal) { // High Strength, Low Intelligence
+				humans.push(new Guard());
+				(humans[humans.length - 1] as Guard).stats = human.stats;;
+			}
 			break;
 		case "defense": // Gives you some sort of tank/guard profession.
+			if (humanStats["strength"] >= highTierVal) { // High Strength, High Intelligence
+				humans.push(new Warrior());
+				(humans[humans.length - 1] as Warrior).stats = human.stats;;
+			}
+			else if (humanStats["strength"] >= midTierVal && humanStats["strength"] < highTierVal) { // High Strength, Mid Intelligence
+				humans.push(new Guard());
+				(humans[humans.length - 1] as Guard).stats = human.stats;;
+			}
+			else if (humanStats["strength"] < midTierVal) { // High Strength, Low Intelligence
+				humans.push(new Guard());
+				(humans[humans.length - 1] as Guard).stats = human.stats;
+			}
 			break;
-		case "dexterity": // Gives you an assassin profession or something.
+		case "dexterity": // Gives you an assassin/hunter profession or something.
+			humans.push(new Hunter());
+			(humans[humans.length - 1] as Hunter).stats = human.stats;;
 			break;
 		case "HP": // Same as defense.
+			if (humanStats["defense"] >= highTierVal) { // High Strength, High Intelligence
+				humans.push(new Warrior());
+				(humans[humans.length - 1] as Warrior).stats = human.stats;
+			}
+			else if (humanStats["defense"] >= midTierVal && humanStats["defense"] < highTierVal) { // High Strength, Mid Intelligence
+				humans.push(new Guard());
+				(humans[humans.length - 1] as Guard).stats = human.stats;;
+			}
+			else if (humanStats["defense"] < midTierVal) { // High Strength, Low Intelligence
+				humans.push(new Guard());
+				(humans[humans.length - 1] as Guard).stats = human.stats;;
+			}
 			break;
 		case "vitality": // Same as HP & defense.
+			if (humanStats["strength"] >= highTierVal) { // High Strength, High Intelligence
+				humans.push(new Warrior());
+				(humans[humans.length - 1] as Warrior).stats = human.stats;;
+			}
+			else if (humanStats["strength"] >= midTierVal && humanStats["strength"] < highTierVal) { // High Strength, Mid Intelligence
+				humans.push(new Warrior());
+				(humans[humans.length - 1] as Warrior).stats = human.stats;;
+			}
+			else if (humanStats["strength"] < midTierVal) { // High Strength, Low Intelligence
+				humans.push(new Guard());
+				(humans[humans.length - 1] as Guard).stats = human.stats;;
+			}
 			break;
 		case "MP": // Gives a mage/healer profession.
+			if (humanStats["intelligence"] >= highTierVal) { // High MP, High Intelligence
+				humans.push(new Mage());
+				(humans[humans.length - 1] as Mage).stats = human.stats;;
+			}
+			else if (humanStats["intelligence"] >= midTierVal && humanStats["intelligence"] < highTierVal) { // High Intelligence, Mid MP
+				humans.push(new Doctor());
+				(humans[humans.length - 1] as Doctor).stats = human.stats;;
+			}
+			else if (humanStats["intelligence"] < midTierVal) { // High Intelligence, Low MP
+				humans.push(new Alchemist());
+				(humans[humans.length - 1] as Alchemist).stats = human.stats;;
+			}
 			break;
 		case "intelligence": // Same as MP but could also give a teaching profession.
+			if (humanStats["MP"] >= highTierVal) { // High Intelligence, High MP
+				humans.push(new Mage());
+				(humans[humans.length - 1] as Mage).stats = human.stats;;
+			}
+			else if (humanStats["MP"] >= midTierVal && humanStats["MP"] < highTierVal) { // High Intelligence, Mid MP
+				humans.push(new Doctor());
+				(humans[humans.length - 1] as Doctor).stats = human.stats;;
+			}
+			else if (humanStats["MP"] < midTierVal) { // High Intelligence, Low MP
+				humans.push(new Alchemist());
+				(humans[humans.length - 1] as Alchemist).stats = human.stats;;
+			}
 			break;
 		case "wisdom": // Same as MP.
-			break;
-		case "luck": // Haven't decided yet.
+			if (humanStats["MP"] >= highTierVal) { // High Intelligence, High MP
+				humans.push(new Mage());
+				(humans[humans.length - 1] as Mage).stats = human.stats;;
+			}
+			else if (humanStats["MP"] >= midTierVal && humanStats["MP"] < highTierVal) { // High Intelligence, Mid MP
+				if (getRandomInt(0, 2) == 0) {
+					humans.push(new Doctor());
+					(humans[humans.length - 1] as Doctor).stats = human.stats;
+				}
+				else {
+					humans.push(new Trader());
+					(humans[humans.length - 1] as Trader).stats = human.stats;;
+				}
+			}
+			else if (humanStats["MP"] < midTierVal) { // High Intelligence, Low MP
+				humans.push(new Alchemist());
+				(humans[humans.length - 1] as Alchemist).stats = human.stats;;
+			}
 			break;
 	}
 
-	// switch ((document.getElementById("humanTypeSelect") as HTMLSelectElement).value) {
-	// 	case "Miner":
-	// 		humans.push(new Miner());
-	// 		(humans[humans.length - 1] as Miner).GenerateRandomValues();
-	// 		break;
-	// 	case "Hunter":
-	// 		humans.push(new Hunter());
-	// 		(humans[humans.length - 1] as Hunter).GenerateRandomValues();
-	// 		break;
-	// 	case "Warrior":
-	// 		humans.push(new Warrior());
-	// 		(humans[humans.length - 1] as Warrior).GenerateRandomValues();
-	// 		break;
-	// 	case "Mage":
-	// 		humans.push(new Mage());
-	// 		(humans[humans.length - 1] as Mage).GenerateRandomValues();
-	// 		break;
-	// }
 	updateListOfHumansDiv();
 }
 
@@ -274,13 +394,6 @@ function updateListOfHumansDiv() {
 		element.innerHTML += "<br><strong>" + humans[i].name + "</strong>'s inventory contains " + humans[i].getInventoryString() + ".";
 	}
 	element.hidden = false;
-}
-
-function updateCreateHumanButton(): void {
-	var e = document.getElementById("humanTypeSelect");
-	const target = e as HTMLSelectElement
-	var e2 = document.getElementById("createHumanButton") as HTMLElement;
-	e2.innerHTML = "Create " + target.value;
 }
 
 function makeHumansDoThings() {
@@ -298,6 +411,21 @@ function makeHumansDoThings() {
 		else if (human instanceof Mage) {
 			(human as Mage).Cast();	
 		}
+		else if (human instanceof Guard) {
+			(human as Guard).Guard();	
+		}
+		else if (human instanceof Doctor) {
+			(human as Doctor).Heal();	
+		}
+		else if (human instanceof Alchemist) {
+			(human as Alchemist).Cast();	
+		}
+		else if (human instanceof Trader) {
+			(human as Trader).Trade();	
+		}
+		else {
+			console.log(human);
+		}
 	});
 	updateListOfHumansDiv();
 }
@@ -307,5 +435,3 @@ function logHumans(): void {
     	console.log(humans[i]);
 	}
 }
-
-setTimeout(updateCreateHumanButton, 25)
