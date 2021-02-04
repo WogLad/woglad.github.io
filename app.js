@@ -401,6 +401,6 @@ function loadJs(url) {
     document.documentElement.firstChild.appendChild(script);
 }
 setTimeout(function () {
-    loadJs("chance.js");
+    loadJs("https://chancejs.com/chance.min.js");
 }, 50);
-const fileVersion = 1;
+const fileVersion = 2;

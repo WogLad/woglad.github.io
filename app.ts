@@ -444,7 +444,7 @@ function loadJs(url: string): void {
 }
 
 setTimeout(function() {
-	loadJs("chance.js");
+	loadJs("https://chancejs.com/chance.min.js");
 }, 50);
 
-const fileVersion: number = 1;
+const fileVersion: number = 2;
