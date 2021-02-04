@@ -44,11 +44,16 @@ class Human {
         }
         return inventoryString;
     }
+    toJson() {
+        var jsonData = JSON.parse(JSON.stringify(this));
+        return jsonData;
+    }
 }
 class Hunter extends Human {
     constructor() {
         super();
         this.GenerateRandomValues();
+        this.humanType = "hunter";
     }
     Hunt() {
         this.AddToInventory(itemDb["meat"], getRandomInt(2, 5));
@@ -63,6 +68,7 @@ class Warrior extends Human {
     constructor() {
         super();
         this.GenerateRandomValues();
+        this.humanType = "warrior";
     }
     Fight() {
         this.AddToInventory(itemDb["rotten_flesh"], getRandomInt(2, 5));
@@ -77,6 +83,7 @@ class Guard extends Human {
     constructor() {
         super();
         this.GenerateRandomValues();
+        this.humanType = "guard";
     }
     Guard() {
         this.AddToInventory(itemDb["rotten_flesh"], getRandomInt(2, 5));
@@ -91,6 +98,7 @@ class Mage extends Human {
     constructor() {
         super();
         this.GenerateRandomValues();
+        this.humanType = "mage";
     }
     Cast() {
         this.AddToInventory(itemDb["mana_crystal"], getRandomInt(2, 5));
@@ -105,6 +113,7 @@ class Doctor extends Human {
     constructor() {
         super();
         this.GenerateRandomValues();
+        this.humanType = "doctor";
     }
     Heal() {
         this.AddToInventory(itemDb["mana_crystal"], getRandomInt(2, 5));
@@ -119,16 +128,25 @@ class Alchemist extends Human {
     Cast() {
         this.AddToInventory(itemDb["mana_crystal"], getRandomInt(2, 5));
     }
+    constructor() {
+        super();
+        this.humanType = "alchemist";
+    }
 }
 class Trader extends Human {
     Trade() {
         this.AddToInventory(itemDb["mana_crystal"], getRandomInt(2, 5));
+    }
+    constructor() {
+        super();
+        this.humanType = "trader";
     }
 }
 class Miner extends Human {
     constructor() {
         super();
         this.GenerateRandomValues();
+        this.humanType = "miner";
     }
     Mine() {
         this.AddToInventory(itemDb["ore"], getRandomInt(2, 5));
@@ -404,3 +422,87 @@ setTimeout(function () {
     loadJs("https://chancejs.com/chance.min.js");
 }, 50);
 const fileVersion = 2;
+function jsonToHuman(jsonData) {
+    var human;
+    switch (jsonData["humanType"]) {
+        case "hunter":
+            var hunter = new Hunter();
+            hunter.name = jsonData["name"];
+            hunter.age = jsonData["age"];
+            hunter.humanLogs = jsonData["humanLogs"];
+            hunter.currentGold = jsonData["currentGold"];
+            hunter.currentInventory = jsonData["currentInventory"];
+            hunter.currentBow = jsonData["currentInventory"][0];
+            human = hunter;
+            break;
+        case "warrior":
+            var warrior = new Warrior();
+            warrior.name = jsonData["name"];
+            warrior.age = jsonData["age"];
+            warrior.humanLogs = jsonData["humanLogs"];
+            warrior.currentGold = jsonData["currentGold"];
+            warrior.currentInventory = jsonData["currentInventory"];
+            warrior.currentSword = jsonData["currentInventory"][0];
+            human = warrior;
+            break;
+        case "guard":
+            var guard = new Guard();
+            guard.name = jsonData["name"];
+            guard.age = jsonData["age"];
+            guard.humanLogs = jsonData["humanLogs"];
+            guard.currentGold = jsonData["currentGold"];
+            guard.currentInventory = jsonData["currentInventory"];
+            guard.currentSword = jsonData["currentInventory"][0];
+            human = guard;
+            break;
+        case "mage":
+            var mage = new Mage();
+            mage.name = jsonData["name"];
+            mage.age = jsonData["age"];
+            mage.humanLogs = jsonData["humanLogs"];
+            mage.currentGold = jsonData["currentGold"];
+            mage.currentInventory = jsonData["currentInventory"];
+            mage.currentStaff = jsonData["currentInventory"][0];
+            human = mage;
+            break;
+        case "doctor":
+            var doctor = new Doctor();
+            doctor.name = jsonData["name"];
+            doctor.age = jsonData["age"];
+            doctor.humanLogs = jsonData["humanLogs"];
+            doctor.currentGold = jsonData["currentGold"];
+            doctor.currentInventory = jsonData["currentInventory"];
+            doctor.currentWand = jsonData["currentInventory"][0];
+            human = doctor;
+            break;
+        case "alchemist":
+            var alchemist = new Alchemist();
+            alchemist.name = jsonData["name"];
+            alchemist.age = jsonData["age"];
+            alchemist.humanLogs = jsonData["humanLogs"];
+            alchemist.currentGold = jsonData["currentGold"];
+            alchemist.currentInventory = jsonData["currentInventory"];
+            human = alchemist;
+            break;
+        case "trader":
+            var trader = new Trader();
+            trader.name = jsonData["name"];
+            trader.age = jsonData["age"];
+            trader.humanLogs = jsonData["humanLogs"];
+            trader.currentGold = jsonData["currentGold"];
+            trader.currentInventory = jsonData["currentInventory"];
+            human = trader;
+            break;
+        case "miner":
+            var miner = new Miner();
+            miner.name = jsonData["name"];
+            miner.age = jsonData["age"];
+            miner.humanLogs = jsonData["humanLogs"];
+            miner.currentGold = jsonData["currentGold"];
+            miner.currentInventory = jsonData["currentInventory"];
+            miner.currentPickaxe = jsonData["currentInventory"][0];
+            human = miner;
+            break;
+    }
+    return human;
+}
