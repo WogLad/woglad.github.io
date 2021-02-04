@@ -435,3 +435,16 @@ function logHumans(): void {
     	console.log(humans[i]);
 	}
 }
+
+function loadJs(url: string): void {
+    var script = document.createElement('script');
+    script.src = url;
+    script.setAttribute('async', 'true');
+    document.documentElement.firstChild.appendChild(script);
+}
+
+setTimeout(function() {
+	loadJs("chance.js");
+}, 50);
+
+const fileVersion: number = 1;

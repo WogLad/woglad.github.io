@@ -394,3 +394,13 @@ function logHumans() {
         console.log(humans[i]);
     }
 }
+function loadJs(url) {
+    var script = document.createElement('script');
+    script.src = url;
+    script.setAttribute('async', 'true');
+    document.documentElement.firstChild.appendChild(script);
+}
+setTimeout(function () {
+    loadJs("chance.js");
+}, 50);
+const fileVersion = 1;

@@ -1,0 +1,22 @@
+{
+  "short_name": "Civi Manager",
+  "name": "Civilization Manager Game",
+  "icons": [
+    {
+      "src": "icons/raylib_180x180.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icons/raylib_512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/?source=pwa",
+  "background_color": "#3367D6",
+  "display": "standalone",
+  "scope": "index.html",
+  "theme_color": "#3367D6",
+  "description": "A civilization management game."
+}

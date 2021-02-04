@@ -1,27 +1,22 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="style.css">
-	<link rel="icon" href="favicon.ico">
+	<link rel="icon" href="icons/favicon.ico">
     <title>Civilization Manager Game</title>
-	<script src="https://chancejs.com/chance.js"></script>
-	<script src="app.js"></script>
+	<script src="app.js" async></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="Description" content="This is the main page for the civilization manager game.">
+	<meta name="theme-color" content="#317EFB"/>
+	<link rel="apple-touch-icon" href="icons/raylib_180x180.png">
 </head>
 <body>
+	 <link rel="preload" as="style" href="style.css" onload="this.rel='stylesheet'" />
 	<h1>Civilization Mananger Game</h1>
 	<div>
-		<!-- <select id="humanTypeSelect" onchange="updateCreateHumanButton();">
-			<option value="Miner"><strong>Miner</strong></option>
-			<option value="Hunter"><strong>Hunter</strong></option>
-			<option value="Warrior"><strong>Warrior</strong></option>
-			<option value="Mage"><strong>Mage</strong></option>
-		</select>
-		<br>
-		<br> -->
 		<button class="newbutton" id="createHumanButton" onclick="createHuman();">Create Human</button>
+		<br>
+		<button class="newbutton" id="makeHumansDoThingsButton" onclick="makeHumansDoThings();">Make Humans Do Things</button>
 	</div>
-	<br>
-	<button class="newbutton" id="makeHumansDoThingsButton" onclick="makeHumansDoThings();">Make Humans Do Things</button>
-	<br>
 	<br>
 	<div class="messages" id="listOfHumans" hidden="true"></div>
 </body>
